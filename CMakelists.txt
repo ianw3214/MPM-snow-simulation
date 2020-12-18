@@ -7,6 +7,7 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 add_executable(final)
 
+target_include_directories(final PRIVATE extern/eigen)
 target_include_directories(final PRIVATE include)
 
 set_property(TARGET final PROPERTY CXX_STANDARD 17)

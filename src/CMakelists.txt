@@ -1,2 +1,3 @@
 # Add source files into this cmakelists
 target_sources(final PRIVATE simulation.cpp)
+target_sources(final PRIVATE particle.cpp)
