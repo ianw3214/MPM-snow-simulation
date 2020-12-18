@@ -1,1 +1,2 @@
 # Add source files into this cmakelists
+target_sources(final PRIVATE simulation.cpp)
