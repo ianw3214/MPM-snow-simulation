@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.13.0 FATAL_ERROR)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+project(final)
+
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+add_executable(final)
+
+target_include_directories(final PRIVATE include)
+
+set_property(TARGET final PROPERTY CXX_STANDARD 17)
+
+# PLATFORM DEFINITIONS AND SETTINGS
+if (WIN32)
+# set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS")
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT final)
+endif()
+
+target_sources(final PRIVATE main.cpp)
+add_subdirectory(src)
