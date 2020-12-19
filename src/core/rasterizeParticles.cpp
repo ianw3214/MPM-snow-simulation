@@ -1,6 +1,25 @@
 #include "core/rasterizeParticles.hpp"
 #include <cmath>
 
+namespace {
+double N(double x) {
+  const double x_abs = std::abs(x);
+  if (x_abs < 1)
+    return std::pow(x_abs, 3) / 2.0 - std::pow(x_abs, 2) + 2.0 / 3.0;
+  else if (x_abs < 2)
+    return -std::pow(x_abs, 3) / 6.0 + std::pow(x_abs, 2) - 2.0 * x_abs +
+           4.0 / 3.0;
+  else
+    return 0.0;
+};
+
+double calculate_weight(double h_inverse, double x_offset, double y_offset,
+                        double z_offset) {
+  return N(h_inverse * x_offset) * N(h_inverse * y_offset) *
+         N(h_inverse * z_offset);
+};
+} // namespace
+
 void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
   // Common numbers used in calculations
   const double h_inverse = 1.0 / grid.cell_size();
@@ -22,21 +41,6 @@ void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
     const int z_index =
         static_cast<int>(std::floor(particle_z / grid.cell_size()));
 
-    auto calculate_weight = [=](double x_offset, double y_offset,
-                                double z_offset) {
-      auto N = [=](double x) {
-        const double x_abs = std::abs(x);
-        if (x_abs < 1)
-          return std::pow(x_abs, 3) / 2.0 - std::pow(x_abs, 2) + 2.0 / 3.0;
-        else if (x_abs < 2)
-          return -std::pow(x_abs, 3) / 6.0 + std::pow(x_abs, 2) - 2.0 * x_abs +
-                 4.0 / 3.0;
-        else
-          return 0.0;
-      };
-      return N(h_inverse * x_offset) * N(h_inverse * y_offset) *
-             N(h_inverse * z_offset);
-    };
     // When a particle lies on a grid node, the weights at the endpoints are 0
     // So we only have to worry about 4 grid nodes max per particle
     for (int a = 0; a < 4; ++a) {
@@ -45,8 +49,9 @@ void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
           const int grid_x = x_index + a;
           const int grid_y = y_index + b;
           const int grid_z = z_index + c;
-          const double weight = calculate_weight(
-              particle_x - grid_x, particle_y - grid_y, particle_z - grid_z);
+          const double weight =
+              calculate_weight(h_inverse, particle_x - grid_x,
+                               particle_y - grid_y, particle_z - grid_z);
           grid.AppendMass(grid_x, grid_y, grid_z, particle_mass * weight);
           // Just push without indexing since velocity calculations are done in
           // the same order
