@@ -20,7 +20,7 @@ double calculate_weight(double h_inverse, double x_offset, double y_offset,
 };
 } // namespace
 
-void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
+void RasterizeParticles(std::vector<Particle> &p, Grid &grid, bool calculateVolumes) {
   // Common numbers used in calculations
   const double h_inverse = 1.0 / grid.cell_size();
 
@@ -28,7 +28,7 @@ void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
   std::vector<double> weights_cache;
   weights_cache.reserve(p.size() * 4 * 4 * 4);
 
-  for (const Particle &particle : p) {
+  for (Particle &particle : p) {
     const double particle_x = particle.m_position(0);
     const double particle_y = particle.m_position(1);
     const double particle_z = particle.m_position(2);
@@ -43,9 +43,9 @@ void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
 
     // When a particle lies on a grid node, the weights at the endpoints are 0
     // So we only have to worry about 4 grid nodes max per particle
-    for (int a = 0; a < 4; ++a) {
-      for (int b = 0; b < 4; ++b) {
-        for (int c = 0; c < 4; ++c) {
+    for (int a = -1; a < 3; ++a) {
+      for (int b = -1; b < 3; ++b) {
+        for (int c = -1; c < 3; ++c) {
           const int grid_x = x_index + a;
           const int grid_y = y_index + b;
           const int grid_z = z_index + c;
@@ -64,7 +64,11 @@ void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
   // Calculate the velocities after the masses are calculated to normalize
   // properly
   unsigned int cache_index = 0;
-  for (const Particle &particle : p) {
+  for (Particle &particle : p) {
+    if (calculateVolumes) {
+      particle.m_volume = 0.0;
+      particle.m_density = 0.0;
+    }
     const double particle_x = particle.m_position(0);
     const double particle_y = particle.m_position(1);
     const double particle_z = particle.m_position(2);
@@ -80,9 +84,9 @@ void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
 
     // When a particle lies on a grid node, the weights at the endpoints are 0
     // So we only have to worry about 4 grid nodes max per particle
-    for (int a = 0; a < 4; ++a) {
-      for (int b = 0; b < 4; ++b) {
-        for (int c = 0; c < 4; ++c) {
+    for (int a = -1; a < 3; ++a) {
+      for (int b = -1; b < 3; ++b) {
+        for (int c = -1; c < 3; ++c) {
           const int grid_x = x_index + a;
           const int grid_y = y_index + b;
           const int grid_z = z_index + c;
@@ -91,8 +95,16 @@ void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
           grid.AppendVelocity(grid_x, grid_y, grid_z,
                               velocity * particle_mass * cached_weight /
                                   node_mass);
+          // Also calculate the volume/density if needed
+          if (calculateVolumes) {
+            particle.m_density += node_mass * cached_weight;
+          }
         }
       }
+    }
+    if (calculateVolumes) {
+      particle.m_density /= std::pow(grid.cell_size(), 3);
+      particle.m_volume = particle_mass / particle.m_density;
     }
   }
 }
