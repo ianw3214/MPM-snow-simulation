@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 
+#include "collision_object.hpp"
 #include <Eigen/Core>
 
 class GridCoordinate {
@@ -40,6 +41,8 @@ public:
   void AppendVelocity(int x, int y, int z, const Eigen::Vector3d &velocity);
 
   double GetMass(int x, int y, int z);
+
+  void resolve_collision(CollisionObject &collision_object, double dt);
 
   void clear();
 

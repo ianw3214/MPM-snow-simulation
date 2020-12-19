@@ -1,7 +1,9 @@
 # Add source files into this cmakelists
+target_sources(final PRIVATE collision_object.cpp)
 target_sources(final PRIVATE constants.cpp)
 target_sources(final PRIVATE simulation.cpp)
 target_sources(final PRIVATE particle.cpp)
 target_sources(final PRIVATE grid.cpp)
+target_sources(final PRIVATE ground.cpp)
 
 add_subdirectory(core)

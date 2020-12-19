@@ -29,6 +29,15 @@ double Grid::GetMass(int x, int y, int z) {
   return 0.0;
 }
 
+void Grid::resolve_collision(CollisionObject &collision_object, double dt) {
+  for (auto &entry : m_nodes) {
+    Eigen::Vector3d position(entry.first.i * m_cell_size,
+                             entry.first.j * m_cell_size,
+                             entry.first.k * m_cell_size);
+    collision_object.resolve_collision(position, entry.second.m_velocity, dt);
+  }
+}
+
 void Grid::clear() { m_nodes.clear(); }
 
 bool GridCoordinate::operator==(const GridCoordinate &other) const {
