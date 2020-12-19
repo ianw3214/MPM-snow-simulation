@@ -8,7 +8,9 @@ public:
   Eigen::Vector3d m_position;
   Eigen::Vector3d m_velocity;
 
-  float m_mass;
+  double m_mass;
+  double m_volume;
+  double m_density;
 
   /**
    * Deformation gradients

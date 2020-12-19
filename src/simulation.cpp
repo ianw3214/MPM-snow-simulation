@@ -1,13 +1,16 @@
 #include "simulation.hpp"
 #include "core/rasterizeParticles.hpp"
 
-Simulation::Simulation(const Constants &constants) : constants(constants) {}
+Simulation::Simulation(const Constants &constants) 
+  : constants(constants) 
+  , m_firstTick(true)
+{}
 
 void Simulation::Update(double dt) {
   // 1. Rasterize particle data to the grid.
-  RasterizeParticles(particles, grid);
-
   // 2. FIRST TIMESTEP ONLY: Compute particle volumes and densities.
+  RasterizeParticles(particles, grid, m_firstTick);
+  m_firstTick = false;
 
   // 3. Compute grid forces.
 
