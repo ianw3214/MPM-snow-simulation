@@ -19,4 +19,5 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT f
 endif()
 
 target_sources(final PRIVATE main.cpp)
+add_subdirectory(include)
 add_subdirectory(src)
