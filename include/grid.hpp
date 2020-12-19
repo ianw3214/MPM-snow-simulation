@@ -37,10 +37,13 @@ public:
 
   inline double cell_size() const { return m_cell_size; }
 
+  GridCoordinate get_coordinate(const Eigen::Vector3d &position) const;
+
   void AppendMass(int x, int y, int z, double mass);
   void AppendVelocity(int x, int y, int z, const Eigen::Vector3d &velocity);
 
-  double GetMass(int x, int y, int z);
+  double GetMass(int x, int y, int z) const;
+  void GetVelocity(Eigen::Vector3d &out, int x, int y, int z) const;
 
   void resolve_collision(CollisionObject &collision_object, double dt);
 

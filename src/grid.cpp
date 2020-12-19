@@ -2,6 +2,12 @@
 
 Grid::Grid(double cell_size) : m_cell_size(cell_size) {}
 
+GridCoordinate Grid::get_coordinate(const Eigen::Vector3d &position) const {
+  return {static_cast<int>(std::floor(position(0) / m_cell_size)),
+          static_cast<int>(std::floor(position(1) / m_cell_size)),
+          static_cast<int>(std::floor(position(2) / m_cell_size))};
+}
+
 void Grid::AppendMass(int x, int y, int z, double mass) {
   auto it = m_nodes.find(GridCoordinate{x, y, z});
   if (it == m_nodes.end()) {
@@ -21,12 +27,20 @@ void Grid::AppendVelocity(int x, int y, int z,
   }
 }
 
-double Grid::GetMass(int x, int y, int z) {
+double Grid::GetMass(int x, int y, int z) const {
   auto it = m_nodes.find(GridCoordinate{x, y, z});
   if (it != m_nodes.end()) {
-    return m_nodes[{x, y, z}].m_mass;
+    return (*it).second.m_mass;
   }
   return 0.0;
+}
+
+void Grid::GetVelocity(Eigen::Vector3d &out, int x, int y, int z) const {
+  auto it = m_nodes.find(GridCoordinate{x, y, z});
+  if (it != m_nodes.end()) {
+    out = (*it).second.m_velocity;
+  }
+  out.setZero();
 }
 
 void Grid::resolve_collision(CollisionObject &collision_object, double dt) {
