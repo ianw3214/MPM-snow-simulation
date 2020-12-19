@@ -49,9 +49,10 @@ void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
           const int grid_x = x_index + a;
           const int grid_y = y_index + b;
           const int grid_z = z_index + c;
-          const double weight =
-              calculate_weight(h_inverse, particle_x - grid_x,
-                               particle_y - grid_y, particle_z - grid_z);
+          const double weight = calculate_weight(
+              h_inverse, particle_x - grid_x * grid.cell_size(),
+              particle_y - grid_y * grid.cell_size(),
+              particle_z - grid_z * grid.cell_size());
           grid.AppendMass(grid_x, grid_y, grid_z, particle_mass * weight);
           // Just push without indexing since velocity calculations are done in
           // the same order

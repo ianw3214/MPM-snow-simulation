@@ -18,9 +18,10 @@ void Simulation::Update(double dt) {
     grid.resolve_collision(*collision_object, dt);
   }
 
-  // 6. Time integration.
+  // 6. Implicit velocity update.
+  // Omitted (using explicit update).
 
-  // 7. Update deformation gradient.
+  // 7. Update deformation gradients.
 
   // 8. Update particle velocities.
 
@@ -32,6 +33,9 @@ void Simulation::Update(double dt) {
   }
 
   // 10. Update particle positions.
+  for (auto &particle : particles) {
+    particle.m_position += dt * particle.m_velocity;
+  }
 
   // Clean up
   grid.clear();

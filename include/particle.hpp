@@ -9,7 +9,13 @@ public:
   Eigen::Vector3d m_velocity;
 
   float m_mass;
-  Eigen::Matrix3d m_deformation;
+
+  /**
+   * Deformation gradients
+   */
+  Eigen::Matrix3d m_def_elastic, m_def_plastic;
+
+  Particle();
 
   void resolve_collision(CollisionObject &collision_object, double dt);
 
