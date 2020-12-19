@@ -1,40 +1,51 @@
 #pragma once
 
-#include <map>
+#include <unordered_map>
 
 #include <Eigen/Core>
 
-class Grid
-{
-	struct Coordinate
-	{
-		double m_x;
-		double m_y;
-		double m_z;
-
-		// The coordinates need to be sortable in the map
-		bool operator<(const Coordinate& other) const
-		{
-			return m_x == other.m_x ? m_y == other.m_y ? m_z < other.m_z : m_y < other.m_y : m_x < other.m_x;
-		};
-	};
-	struct NodeData
-	{
-		double m_mass;
-		Eigen::Vector3d m_velocity;
-	};
+class GridCoordinate {
 public:
-	Grid(double granularity = 0.1);
+  int i;
+  int j;
+  int k;
 
-	inline double Granularity() const { return m_granularity; }
+  bool operator==(const GridCoordinate &other) const;
+};
 
-	void AppendMass(double x, double y, double z, double mass);
-	void AppendVelocity(double x, double y, double z, Eigen::Vector3d velocity);
+// Make coordinate hashable
+namespace std {
+template <> struct hash<GridCoordinate> {
+  std::size_t operator()(const GridCoordinate &k) const {
+    using std::hash;
+    using std::size_t;
+    return ((hash<int>()(k.i) ^ (hash<int>()(k.j) << 1)) >> 1) ^
+           (hash<int>()(k.k) << 1);
+  }
+};
 
-	double GetMass(double x, double y, double z);
+} // namespace std
+class Grid {
+public:
+  struct NodeData {
+    double m_mass;
+    Eigen::Vector3d m_velocity;
+  };
+
+  explicit Grid(double cell_size = 0.1);
+
+  inline double cell_size() const { return m_cell_size; }
+
+  void AppendMass(int x, int y, int z, double mass);
+  void AppendVelocity(int x, int y, int z, const Eigen::Vector3d &velocity);
+
+  double GetMass(int x, int y, int z);
+
+  void clear();
+
 private:
-	std::map<Coordinate, NodeData> m_nodes;
+  std::unordered_map<GridCoordinate, NodeData> m_nodes;
 
-	// grid properties
-	double m_granularity;
+  // grid properties
+  double m_cell_size;
 };

@@ -1,11 +1,12 @@
 #include "simulation.hpp"
+#include "core/rasterizeParticles.hpp"
 
-Simulation::Simulation()
-{
+Simulation::Simulation(const Constants &constants) : constants(constants) {}
 
-}
+void Simulation::Update(double dt) {
+  RasterizeParticles(particles, grid);
 
-void Simulation::Update(double dt)
-{
+  // TODO
 
+  grid.clear();
 }

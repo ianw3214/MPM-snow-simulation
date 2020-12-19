@@ -1,2 +1,7 @@
 # Build files
 build/
+cmake-build-debug/
+cmake-build-release/
+
+# IDE config
+.idea/

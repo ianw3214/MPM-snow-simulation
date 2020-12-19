@@ -1,10 +1,14 @@
 #include "simulation.hpp"
+#include <Eigen/Dense>
+#include <iostream>
 
-int main(int argc, char* argv[])
-{
-    Simulation simulation;
+int main(int argc, char *argv[]) {
+  Constants constants;
+  Simulation simulation(constants);
 
-    simulation.Update(0.016);
+  simulation.Update(0.016);
 
-    return 0;
+  std::cout << "Simulation finished." << std::endl;
+
+  return 0;
 }

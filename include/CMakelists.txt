@@ -1,3 +1,4 @@
+target_sources(final PRIVATE constants.hpp)
 target_sources(final PRIVATE simulation.hpp)
 target_sources(final PRIVATE particle.hpp)
 target_sources(final PRIVATE grid.hpp)
