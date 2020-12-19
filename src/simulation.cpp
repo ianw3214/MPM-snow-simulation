@@ -1,10 +1,9 @@
 #include "simulation.hpp"
 #include "core/rasterizeParticles.hpp"
+#include "update_deformation_gradient.hpp"
 
-Simulation::Simulation(const Constants &constants) 
-  : constants(constants) 
-  , m_firstTick(true)
-{}
+Simulation::Simulation(const Constants &constants)
+    : constants(constants), m_firstTick(true) {}
 
 void Simulation::Update(double dt) {
   // 1. Rasterize particle data to the grid.
@@ -25,6 +24,15 @@ void Simulation::Update(double dt) {
   // Omitted (using explicit update).
 
   // 7. Update deformation gradients.
+  auto get_grad_weight =
+      [&](int i, int j, int k,
+          const Eigen::Vector3d &position) -> Eigen::Vector3d {
+    // TODO implement
+    return Eigen::Vector3d::Zero();
+  };
+  for (auto &particle : particles) {
+    update_deformation_gradient(constants, particle, grid, dt, get_grad_weight);
+  }
 
   // 8. Update particle velocities.
 
