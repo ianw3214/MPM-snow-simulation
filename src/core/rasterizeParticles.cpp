@@ -1,4 +1,5 @@
 #include "core/rasterizeParticles.hpp"
+#include <cmath>
 
 void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
   // Common numbers used in calculations
@@ -15,14 +16,12 @@ void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
     const double particle_mass = particle.m_mass;
     // Negative particles need to get rounded 'down'
     const int x_index =
-        static_cast<int>(particle_x / grid.cell_size()) - particle_x < 0.0 ? 1
-                                                                           : 0;
+        static_cast<int>(std::floor(particle_x / grid.cell_size()));
     const int y_index =
-        static_cast<int>(particle_y / grid.cell_size()) - particle_y < 0.0 ? 1
-                                                                           : 0;
+        static_cast<int>(std::floor(particle_y / grid.cell_size()));
     const int z_index =
-        static_cast<int>(particle_z / grid.cell_size()) - particle_z < 0.0 ? 1
-                                                                           : 0;
+        static_cast<int>(std::floor(particle_z / grid.cell_size()));
+
     auto calculate_weight = [=](double x_offset, double y_offset,
                                 double z_offset) {
       auto N = [=](double x) {
@@ -67,14 +66,12 @@ void RasterizeParticles(const std::vector<Particle> &p, Grid &grid) {
     const double particle_mass = particle.m_mass;
     // Negative particles need to get rounded 'down'
     const int x_index =
-        static_cast<int>(particle_x / grid.cell_size()) - particle_x < 0.0 ? 1
-                                                                           : 0;
+        static_cast<int>(std::floor(particle_x / grid.cell_size()));
     const int y_index =
-        static_cast<int>(particle_y / grid.cell_size()) - particle_y < 0.0 ? 1
-                                                                           : 0;
+        static_cast<int>(std::floor(particle_y / grid.cell_size()));
     const int z_index =
-        static_cast<int>(particle_z / grid.cell_size()) - particle_z < 0.0 ? 1
-                                                                           : 0;
+        static_cast<int>(std::floor(particle_z / grid.cell_size()));
+
     // When a particle lies on a grid node, the weights at the endpoints are 0
     // So we only have to worry about 4 grid nodes max per particle
     for (int a = 0; a < 4; ++a) {
