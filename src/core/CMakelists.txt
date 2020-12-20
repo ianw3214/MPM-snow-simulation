@@ -1,2 +1,3 @@
 target_sources(final PRIVATE rasterizeParticles.cpp)
 target_sources(final PRIVATE calculateForces.cpp)
+target_sources(final PRIVATE updateGridVelocity.cpp)
