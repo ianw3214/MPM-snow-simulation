@@ -11,7 +11,7 @@ GridCoordinate Grid::get_coordinate(const Eigen::Vector3d &position) const {
 void Grid::AppendMass(int x, int y, int z, double mass) {
   auto it = m_nodes.find(GridCoordinate{x, y, z});
   if (it == m_nodes.end()) {
-    m_nodes[{x, y, z}] = NodeData{mass, Eigen::Vector3d()};
+    m_nodes[{x, y, z}] = NodeData{mass, Eigen::Vector3d::Zero(), Eigen::Vector3d::Zero() };
   } else {
     m_nodes[{x, y, z}].m_mass += mass;
   }
@@ -21,7 +21,7 @@ void Grid::AppendVelocity(int x, int y, int z,
                           const Eigen::Vector3d &velocity) {
   auto it = m_nodes.find(GridCoordinate{x, y, z});
   if (it == m_nodes.end()) {
-    m_nodes[{x, y, z}] = NodeData{0.0, velocity};
+    m_nodes[{x, y, z}] = NodeData{0.0, velocity, Eigen::Vector3d::Zero()};
   } else {
     m_nodes[{x, y, z}].m_velocity += velocity;
   }
