@@ -13,11 +13,25 @@ double N(double x) {
     return 0.0;
 };
 
+double dN(double x) {
+  const double x_abs = std::abs(x);
+  if (x_abs < 1)
+    return std::pow(x, 2) * 3.0 / 2.0 - 2.0 * x;
+  else if (x_abs < 2)
+    return -std::pow(x, 2) / 2.0 + 2.0 * x - 2.0;
+  else
+    return 0.0;
+}
+
 double calculate_weight(double h_inverse, double x_offset, double y_offset,
                         double z_offset) {
   return N(h_inverse * x_offset) * N(h_inverse * y_offset) *
          N(h_inverse * z_offset);
 };
+
+double calculate_derivative(double h_inverse, double d_offset, double offset1, double offset2) {
+  return dN(h_inverse * d_offset) * N(h_inverse * offset1) * N(h_inverse * offset2) * h_inverse;
+}
 } // namespace
 
 void RasterizeParticles(std::vector<Particle> &p, Grid &grid, bool calculateVolumes) {
@@ -45,13 +59,23 @@ void RasterizeParticles(std::vector<Particle> &p, Grid &grid, bool calculateVolu
           const int grid_x = x_index + a;
           const int grid_y = y_index + b;
           const int grid_z = z_index + c;
+          const double x_offset = particle_x - grid_x * grid.cell_size();
+          const double y_offset = particle_y - grid_y * grid.cell_size();
+          const double z_offset = particle_z - grid_z * grid.cell_size();
           const double weight = calculate_weight(
-              h_inverse, particle_x - grid_x * grid.cell_size(),
-              particle_y - grid_y * grid.cell_size(),
-              particle_z - grid_z * grid.cell_size());
+              h_inverse, x_offset, y_offset, z_offset);
           grid.AppendMass(grid_x, grid_y, grid_z, particle_mass * weight);
           // Cache the weights to avoid calculating again when normalizing velocities
           particle.m_weights[GridCoordinate{grid_x, grid_y, grid_z}] = weight;
+          { // Calculate the derivative of the particle weight
+            Eigen::Vector3d d_w = Eigen::Vector3d::Zero();
+            //calculate it's derivative and cache it
+            d_w.setIdentity();
+            d_w(0) = calculate_derivative(h_inverse, x_offset, y_offset, z_offset);
+            d_w(1) = calculate_derivative(h_inverse, y_offset, x_offset, z_offset);
+            d_w(2) = calculate_derivative(h_inverse, z_offset, x_offset, y_offset);
+            particle.m_weight_derivatives[GridCoordinate{ grid_x, grid_y, grid_z}] = d_w;
+          }
         }
       }
     }
@@ -87,6 +111,7 @@ void RasterizeParticles(std::vector<Particle> &p, Grid &grid, bool calculateVolu
           const int grid_z = z_index + c;
           const double node_mass = grid.GetMass(grid_x, grid_y, grid_z);
           const double cached_weight = particle.m_weights[GridCoordinate{grid_x, grid_y, grid_z}];
+          if (node_mass == 0.0 || cached_weight == 0.0) continue;
           grid.AppendVelocity(grid_x, grid_y, grid_z,
                               velocity * particle_mass * cached_weight /
                                   node_mass);

@@ -13,4 +13,4 @@
 // Outputs
 //  - p: particles with updated weight derivatives
 //  - grid: per grid node forces calculated from particle data
-void CalculateForces(const Constants& constants, std::vector<Particle>& p, Grid& grid);
+void CalculateForces(const Constants& constants, std::vector<Particle>& p, Grid& grid, double dt);

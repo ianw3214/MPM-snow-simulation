@@ -50,7 +50,19 @@ void Grid::GetVelocity(Eigen::Vector3d &out, int x, int y, int z) const {
   if (it != m_nodes.end()) {
     out = (*it).second.m_velocity;
   }
-  out.setZero();
+  else {
+    out.setZero();
+  }
+}
+
+void Grid::GetOldVelocity(Eigen::Vector3d& out, int x, int y, int z) const {
+  auto it = m_nodes.find(GridCoordinate{ x, y, z });
+  if (it != m_nodes.end()) {
+    out = (*it).second.m_velocity_old;
+  }
+  else {
+    out.setZero();
+  }
 }
 
 void Grid::resolve_collision(CollisionObject &collision_object, double dt) {

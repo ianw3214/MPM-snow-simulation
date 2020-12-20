@@ -46,7 +46,7 @@ void update_deformation_gradient(const Constants &constants, Particle &particle,
   Eigen::Matrix3d def_next = def_elastic_next * particle.m_def_plastic;
 
   Eigen::JacobiSVD<Eigen::Matrix3d> svd(
-      def_elastic_next, Eigen::ComputeThinU | Eigen::ComputeThinV);
+      def_elastic_next, Eigen::ComputeFullU | Eigen::ComputeFullV);
   Eigen::Vector3d sigma = svd.singularValues();
 
   double a = 1 - constants.critical_compression,

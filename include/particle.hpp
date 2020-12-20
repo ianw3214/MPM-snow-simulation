@@ -35,6 +35,8 @@ public:
   // Cache determinants of deformation gradients
   double m_def_elastic_det;
   double m_def_plastic_det;
+  Eigen::Matrix3d m_def_elastic_deformed;
+  double m_def_elastic_deformed_det;
 
 private:
 };

@@ -48,6 +48,7 @@ public:
 
   double GetMass(int x, int y, int z) const;
   void GetVelocity(Eigen::Vector3d &out, int x, int y, int z) const;
+  void GetOldVelocity(Eigen::Vector3d& out, int x, int y, int z) const;
 
   void resolve_collision(CollisionObject &collision_object, double dt);
 
