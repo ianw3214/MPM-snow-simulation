@@ -13,7 +13,7 @@ void Simulation::Update(double dt) {
   m_firstTick = false;
 
   // 3. Compute grid forces.
-  CalculateForces(particles, grid);
+  CalculateForces(constants, particles, grid);
 
   // 4. Update velocities on grid.
 
