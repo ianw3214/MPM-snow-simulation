@@ -44,6 +44,7 @@ public:
 
   void AppendMass(int x, int y, int z, double mass);
   void AppendVelocity(int x, int y, int z, const Eigen::Vector3d &velocity);
+  void AppendForce(int x, int y, int z, const Eigen::Vector3d& force);
 
   double GetMass(int x, int y, int z) const;
   void GetVelocity(Eigen::Vector3d &out, int x, int y, int z) const;

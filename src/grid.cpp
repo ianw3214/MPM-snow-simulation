@@ -27,6 +27,16 @@ void Grid::AppendVelocity(int x, int y, int z,
   }
 }
 
+void Grid::AppendForce(int x, int y, int z, const Eigen::Vector3d& force) {
+  auto it = m_nodes.find(GridCoordinate{ x, y, z });
+  if (it == m_nodes.end()) {
+      m_nodes[{x, y, z}] = NodeData{ 0.0, Eigen::Vector3d::Zero(), force};
+  }
+  else {
+      m_nodes[{x, y, z}].m_force += force;
+  }
+}
+
 double Grid::GetMass(int x, int y, int z) const {
   auto it = m_nodes.find(GridCoordinate{x, y, z});
   if (it != m_nodes.end()) {

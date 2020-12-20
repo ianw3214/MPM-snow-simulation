@@ -59,4 +59,6 @@ void update_deformation_gradient(const Constants &constants, Particle &particle,
       svd.matrixU() * sigma.asDiagonal() * svd.matrixV().transpose();
   particle.m_def_plastic = svd.matrixV() * sigma.cwiseInverse().asDiagonal() *
                            svd.matrixU().transpose() * def_next;
+  particle.m_def_elastic_det = particle.m_def_elastic.determinant();
+  particle.m_def_plastic_det = particle.m_def_plastic.determinant();
 }

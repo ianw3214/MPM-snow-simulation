@@ -1,6 +1,9 @@
 #include "particle.hpp"
 
-Particle::Particle() {
+Particle::Particle() 
+	: m_def_elastic_det(0.0)
+	, m_def_plastic_det(0.0)
+{
   m_velocity.setZero();
   m_def_elastic.setIdentity();
   m_def_plastic.setIdentity();
@@ -14,6 +17,8 @@ Particle::Particle(const Eigen::Vector3d& p, const Eigen::Vector3d& v, double m,
 	, m_mass(m)
 	, m_volume(vol)
 	, m_density(d)
+	, m_def_elastic_det(0.0)
+	, m_def_plastic_det(0.0)
 {
 	m_def_elastic.setIdentity();
 	m_def_plastic.setIdentity();

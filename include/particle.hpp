@@ -32,6 +32,9 @@ public:
   };
   std::unordered_map<GridCoordinate, double> m_weights;
   std::unordered_map<GridCoordinate, Eigen::Vector3d> m_weight_derivatives;
+  // Cache determinants of deformation gradients
+  double m_def_elastic_det;
+  double m_def_plastic_det;
 
 private:
 };
