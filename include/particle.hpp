@@ -1,5 +1,8 @@
 #pragma once
 
+#include <unordered_map>
+#include "grid.hpp"
+
 #include "collision_object.hpp"
 #include <Eigen/Core>
 
@@ -20,6 +23,12 @@ public:
   Particle();
 
   void resolve_collision(CollisionObject &collision_object, double dt);
+
+  // Cache weights
+  inline void ResetWeightsCache() {
+	  m_weight_derivatives.clear();
+  };
+  std::unordered_map<GridCoordinate, Eigen::Vector3d> m_weight_derivatives;
 
 private:
 };

@@ -32,7 +32,7 @@ void update_deformation_gradient(const Constants &constants, Particle &particle,
         int j = coord.j + b;
         int k = coord.k + c;
         Eigen::Vector3d grad_weight =
-            get_grad_weight(i, j, k, particle.m_position);
+            get_grad_weight(coord, particle);
         grid.GetVelocity(tmp_velocity, i, j, k);
         grad_v += tmp_velocity * grad_weight.transpose();
       }

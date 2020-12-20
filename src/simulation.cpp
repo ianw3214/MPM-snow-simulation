@@ -1,6 +1,7 @@
 #include "simulation.hpp"
 #include "core/rasterizeParticles.hpp"
 #include "update_deformation_gradient.hpp"
+#include "core/calculateForces.hpp"
 
 Simulation::Simulation(const Constants &constants)
     : constants(constants), m_firstTick(true) {}
@@ -12,6 +13,7 @@ void Simulation::Update(double dt) {
   m_firstTick = false;
 
   // 3. Compute grid forces.
+  CalculateForces(particles, grid);
 
   // 4. Update velocities on grid.
 
@@ -25,10 +27,10 @@ void Simulation::Update(double dt) {
 
   // 7. Update deformation gradients.
   auto get_grad_weight =
-      [&](int i, int j, int k,
-          const Eigen::Vector3d &position) -> Eigen::Vector3d {
-    // TODO implement
-    return Eigen::Vector3d::Zero();
+      [&](const GridCoordinate& coord,
+          const Particle& particle) -> Eigen::Vector3d {
+              auto it = particle.m_weight_derivatives.find(coord);
+    return it == particle.m_weight_derivatives.end() ? Eigen::Vector3d() : it->second;
   };
   for (auto &particle : particles) {
     update_deformation_gradient(constants, particle, grid, dt, get_grad_weight);
@@ -50,6 +52,9 @@ void Simulation::Update(double dt) {
 
   // Clean up
   grid.clear();
+  for (Particle& particle : particles) {
+    particle.ResetWeightsCache();
+  }
 }
 
 void Simulation::add_collision_object(std::unique_ptr<CollisionObject> ptr) {

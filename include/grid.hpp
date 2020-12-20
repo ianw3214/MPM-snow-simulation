@@ -31,6 +31,7 @@ public:
   struct NodeData {
     double m_mass;
     Eigen::Vector3d m_velocity;
+    Eigen::Vector3d m_force;
   };
 
   explicit Grid(double cell_size = 0.1);
@@ -48,6 +49,11 @@ public:
   void resolve_collision(CollisionObject &collision_object, double dt);
 
   void clear();
+
+  std::unordered_map<GridCoordinate, NodeData>::iterator begin() { return m_nodes.begin(); }
+  std::unordered_map<GridCoordinate, NodeData>::const_iterator begin() const { return m_nodes.begin(); }
+  std::unordered_map<GridCoordinate, NodeData>::iterator end() { return m_nodes.end(); }
+  std::unordered_map<GridCoordinate, NodeData>::const_iterator end() const { return m_nodes.end(); }
 
 private:
   std::unordered_map<GridCoordinate, NodeData> m_nodes;

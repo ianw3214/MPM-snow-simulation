@@ -4,6 +4,7 @@ Particle::Particle() {
   m_velocity.setZero();
   m_def_elastic.setIdentity();
   m_def_plastic.setIdentity();
+  m_weight_derivatives.reserve(4 * 4 * 4);
 }
 
 void Particle::resolve_collision(CollisionObject &collision_object, double dt) {
