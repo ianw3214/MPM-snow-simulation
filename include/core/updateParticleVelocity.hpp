@@ -1,13 +1,15 @@
 #pragma once
 
-#include "particle.hpp"
 #include "grid.hpp"
+#include "particle.hpp"
 
-constexpr double alpha = 0.95;
+#include <constants.hpp>
+#include <vector>
 
 // Update particle velocities based on grid node velocities
 // Inputs
 //  - grid: grid with nodes containing velocity data
 // Outputs
 //  - particles: list of particles to have velocity updated
-void UpdateParticleVelocity(std::vector<Particle>& particles, const Grid& grid);
+void UpdateParticleVelocity(const Constants &constants,
+                            std::vector<Particle> &particles, const Grid &grid);

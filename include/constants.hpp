@@ -11,5 +11,7 @@ public:
   const double mu = 0.5;
   const double lambda = 0.5;
 
+  const double flip_alpha = 0.95;
+
   const Eigen::Vector3d gravity = Eigen::Vector3d(0.0, -9.81, 0.0);
 };

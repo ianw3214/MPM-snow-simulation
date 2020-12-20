@@ -1,9 +1,9 @@
 #include "simulation.hpp"
-#include "core/rasterizeParticles.hpp"
-#include "update_deformation_gradient.hpp"
 #include "core/calculateForces.hpp"
+#include "core/rasterizeParticles.hpp"
 #include "core/updateGridVelocity.hpp"
 #include "core/updateParticleVelocity.hpp"
+#include "update_deformation_gradient.hpp"
 
 Simulation::Simulation(const Constants &constants)
     : constants(constants), m_firstTick(true) {}
@@ -40,7 +40,7 @@ void Simulation::Update(double dt) {
   }
 
   // 8. Update particle velocities.
-  UpdateParticleVelocity(particles, grid);
+  UpdateParticleVelocity(constants, particles, grid);
 
   // 9. Particle-based body collisions.
   for (auto &collision_object : collision_objects) {
