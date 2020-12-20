@@ -5,5 +5,7 @@ target_sources(final PRIVATE simulation.cpp)
 target_sources(final PRIVATE particle.cpp)
 target_sources(final PRIVATE grid.cpp)
 target_sources(final PRIVATE ground.cpp)
+target_sources(final PRIVATE camera.cpp)
+target_sources(final PRIVATE image.cpp)
 
 add_subdirectory(core)

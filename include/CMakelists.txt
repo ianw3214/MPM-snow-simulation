@@ -1,9 +1,12 @@
+target_sources(final PRIVATE stb_image_write.h)
 target_sources(final PRIVATE collision_object.hpp)
 target_sources(final PRIVATE constants.hpp)
 target_sources(final PRIVATE simulation.hpp)
 target_sources(final PRIVATE particle.hpp)
 target_sources(final PRIVATE grid.hpp)
 target_sources(final PRIVATE ground.hpp)
+target_sources(final PRIVATE camera.hpp)
+target_sources(final PRIVATE image.hpp)
 target_sources(final PRIVATE update_deformation_gradient.hpp)
 
 add_subdirectory(core)

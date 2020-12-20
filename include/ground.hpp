@@ -4,10 +4,10 @@
 
 class Ground : public CollisionObject {
 public:
-  const double z;
+  const double y;
 
   Ground();
-  Ground(double z);
+  Ground(double y);
   bool detect_collision(const Eigen::Vector3d &position) override;
   Eigen::Vector3d get_normal(const Eigen::Vector3d &position) override;
 };

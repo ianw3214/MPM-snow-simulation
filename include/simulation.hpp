@@ -21,5 +21,5 @@ public:
   void add_collision_object(std::unique_ptr<CollisionObject> ptr);
 
 private:
-	bool m_firstTick;
+  bool m_firstTick;
 };

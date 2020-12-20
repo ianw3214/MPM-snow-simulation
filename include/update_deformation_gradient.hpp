@@ -12,10 +12,9 @@
  * @param particle The particle to update
  * @param grid The grid (assuming previous steps are done)
  * @param dt Delta time
- * @param get_grad_weight A lambda function of type:
- *     (int i, int j, int k, const Eigen::Vector3d &position) -> Eigen::Vector3d
- *     It should return gradient of grid weight given the grid cell index and
- *     particle position.
+ * @param get_grad_weight A lambda function of type: (const GridCoordinate
+ *     &coord, const Particle &particle) -> Eigen::Vector3d. It should return
+ *     gradient of grid weight given the grid cell index and particle position.
  */
 template <typename F>
 void update_deformation_gradient(const Constants &constants, Particle &particle,
@@ -25,14 +24,17 @@ void update_deformation_gradient(const Constants &constants, Particle &particle,
   grad_v.setZero();
   Eigen::Vector3d tmp_velocity;
   auto coord = grid.get_coordinate(particle.m_position);
+  auto temp_coord = coord;
   for (int a = -1; a < 3; ++a) {
     for (int b = -1; b < 3; ++b) {
       for (int c = -1; c < 3; ++c) {
         int i = coord.i + a;
         int j = coord.j + b;
         int k = coord.k + c;
-        Eigen::Vector3d grad_weight =
-            get_grad_weight(coord, particle);
+        temp_coord.i = i;
+        temp_coord.j = j;
+        temp_coord.k = k;
+        Eigen::Vector3d grad_weight = get_grad_weight(temp_coord, particle);
         grid.GetVelocity(tmp_velocity, i, j, k);
         grad_v += tmp_velocity * grad_weight.transpose();
       }
