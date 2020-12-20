@@ -12,7 +12,7 @@ class Simulation {
 public:
   explicit Simulation(const Constants &constants);
 
-  void Init(double size = 1.0, unsigned int edge_length = 10, Eigen::Vector3d p = Eigen::Vector3d::Zero());
+  void Init(double size = 1.0, unsigned int edge_length = 10, Eigen::Vector3d p = Eigen::Vector3d::Zero(), double particle_mass = 1.0);
   void Update(double dt);
 
   const Constants constants;

@@ -8,7 +8,7 @@
 Simulation::Simulation(const Constants &constants)
     : constants(constants), m_firstTick(true) {}
 
-void Simulation::Init(double size, unsigned int edge_length, Eigen::Vector3d p)
+void Simulation::Init(double size, unsigned int edge_length, Eigen::Vector3d p, double particle_mass)
 {
   const double granularity = size / static_cast<double>(edge_length);
 
@@ -19,7 +19,8 @@ void Simulation::Init(double size, unsigned int edge_length, Eigen::Vector3d p)
       for (unsigned int z = 0; z < edge_length; ++z) {
         particles.emplace_back(
           p + Eigen::Vector3d(granularity * x, granularity * y, granularity * z),
-          Eigen::Vector3d::Zero()
+          Eigen::Vector3d::Zero(),
+          particle_mass
         );
       }
     }
