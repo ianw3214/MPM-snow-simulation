@@ -24,10 +24,6 @@ void RasterizeParticles(std::vector<Particle> &p, Grid &grid, bool calculateVolu
   // Common numbers used in calculations
   const double h_inverse = 1.0 / grid.cell_size();
 
-  // Cache the weights to avoid calculating again when normalizing velocities
-  std::vector<double> weights_cache;
-  weights_cache.reserve(p.size() * 4 * 4 * 4);
-
   for (Particle &particle : p) {
     const double particle_x = particle.m_position(0);
     const double particle_y = particle.m_position(1);
@@ -54,9 +50,8 @@ void RasterizeParticles(std::vector<Particle> &p, Grid &grid, bool calculateVolu
               particle_y - grid_y * grid.cell_size(),
               particle_z - grid_z * grid.cell_size());
           grid.AppendMass(grid_x, grid_y, grid_z, particle_mass * weight);
-          // Just push without indexing since velocity calculations are done in
-          // the same order
-          weights_cache.push_back(weight);
+          // Cache the weights to avoid calculating again when normalizing velocities
+          particle.m_weights[GridCoordinate{grid_x, grid_y, grid_z}] = weight;
         }
       }
     }
@@ -91,7 +86,7 @@ void RasterizeParticles(std::vector<Particle> &p, Grid &grid, bool calculateVolu
           const int grid_y = y_index + b;
           const int grid_z = z_index + c;
           const double node_mass = grid.GetMass(grid_x, grid_y, grid_z);
-          const double cached_weight = weights_cache[cache_index++];
+          const double cached_weight = particle.m_weights[GridCoordinate{grid_x, grid_y, grid_z}];
           grid.AppendVelocity(grid_x, grid_y, grid_z,
                               velocity * particle_mass * cached_weight /
                                   node_mass);

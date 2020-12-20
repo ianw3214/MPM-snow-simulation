@@ -4,6 +4,7 @@ Particle::Particle() {
   m_velocity.setZero();
   m_def_elastic.setIdentity();
   m_def_plastic.setIdentity();
+  m_weights.reserve(4 * 4 * 4);
   m_weight_derivatives.reserve(4 * 4 * 4);
 }
 

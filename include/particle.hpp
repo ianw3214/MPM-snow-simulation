@@ -26,8 +26,10 @@ public:
 
   // Cache weights
   inline void ResetWeightsCache() {
+	  m_weights.clear();
 	  m_weight_derivatives.clear();
   };
+  std::unordered_map<GridCoordinate, double> m_weights;
   std::unordered_map<GridCoordinate, Eigen::Vector3d> m_weight_derivatives;
 
 private:
