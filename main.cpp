@@ -8,6 +8,7 @@ int main(int argc, char *argv[]) {
   Constants constants;
   Simulation simulation(constants);
 
+  simulation.Init();
   simulation.add_collision_object(std::make_unique<Ground>(0));
 
   simulation.Update(0.016);

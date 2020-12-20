@@ -8,6 +8,24 @@
 Simulation::Simulation(const Constants &constants)
     : constants(constants), m_firstTick(true) {}
 
+void Simulation::Init(double size, unsigned int edge_length, Eigen::Vector3d p)
+{
+  const double granularity = size / static_cast<double>(edge_length);
+
+  particles.clear();
+  grid.clear();
+  for (unsigned int x = 0; x < edge_length; ++x) {
+    for (unsigned int y = 0; y < edge_length; ++y) {
+      for (unsigned int z = 0; z < edge_length; ++z) {
+        particles.emplace_back(
+          p + Eigen::Vector3d(granularity * x, granularity * y, granularity * z),
+          Eigen::Vector3d::Zero()
+        );
+      }
+    }
+  }
+}
+
 void Simulation::Update(double dt) {
   // 1. Rasterize particle data to the grid.
   // 2. FIRST TIMESTEP ONLY: Compute particle volumes and densities.

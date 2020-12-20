@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Eigen/Core>
+
 #include "constants.hpp"
 #include "grid.hpp"
 #include "particle.hpp"
@@ -10,6 +12,7 @@ class Simulation {
 public:
   explicit Simulation(const Constants &constants);
 
+  void Init(double size = 1.0, unsigned int edge_length = 10, Eigen::Vector3d p = Eigen::Vector3d::Zero());
   void Update(double dt);
 
   const Constants constants;

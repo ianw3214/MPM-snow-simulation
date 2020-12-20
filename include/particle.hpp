@@ -21,6 +21,7 @@ public:
   Eigen::Matrix3d m_def_elastic, m_def_plastic;
 
   Particle();
+  Particle(const Eigen::Vector3d& p, const Eigen::Vector3d& v, double m = 0.0, double vol = 0.0, double d = 0.0);
 
   void resolve_collision(CollisionObject &collision_object, double dt);
 
