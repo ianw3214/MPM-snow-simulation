@@ -84,5 +84,7 @@ void CalculateForces(const Constants& constants, std::vector<Particle>& p, Grid&
       // Finally, add the sum to the forces
       node_force += volume * sigma * d_w;
     }
+    // Also account gravity into forces
+    node_force += data.m_mass * constants.gravity;
   }
 }
