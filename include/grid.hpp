@@ -32,6 +32,8 @@ public:
     double m_mass;
     Eigen::Vector3d m_velocity;
     Eigen::Vector3d m_force;
+
+    Eigen::Vector3d m_velocity_old;
   };
 
   explicit Grid(double cell_size = 0.1);
