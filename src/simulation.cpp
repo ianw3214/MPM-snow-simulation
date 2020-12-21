@@ -111,14 +111,32 @@ void Simulation::Update(double dt) {
     particle.m_position += dt * particle.m_velocity;
   }
 
-  // Render
-  image.clear();
+  // Clean up
+  grid.clear();
+  for (Particle &particle : particles) {
+    particle.ResetWeightsCache();
+  }
+}
+
+void Simulation::render(int frame_index) {
+  std::vector<Eigen::Vector3d> pixels;
+
   for (auto &particle : particles) {
     auto screen_pos = camera.project(particle.m_position);
+    pixels.emplace_back(screen_pos);
+  }
+  sort(pixels.begin(), pixels.end(),
+       [](const Eigen::Vector3d &a, const Eigen::Vector3d &b) {
+         return a(2) > b(2);
+       });
+
+  image.clear();
+  for (auto &screen_pos : pixels) {
     int x = ((int)((screen_pos(0) * 0.5 + 0.5) * (image.width - 1)));
     int y = ((int)((screen_pos(1) * 0.5 + 0.5) * (image.height - 1)));
-    float value =
-        std::clamp(map(0, render_depth, 1, 0, screen_pos(2)), 0.0, 1.0);
+    float value = std::clamp(
+        map(render_depth_near, render_depth_far, 1, 0, screen_pos(2)), 0.0,
+        1.0);
     draw_to_image(image, x, y, value);
     draw_to_image(image, x - 1, y, value);
     draw_to_image(image, x + 1, y, value);
@@ -129,13 +147,6 @@ void Simulation::Update(double dt) {
   snprintf(buff, sizeof(buff), "image%03d.jpg", frame_index);
   std::string filename = buff;
   image.save_to_file(filename);
-  frame_index++;
-
-  // Clean up
-  grid.clear();
-  for (Particle &particle : particles) {
-    particle.ResetWeightsCache();
-  }
 }
 
 void Simulation::add_collision_object(std::unique_ptr<CollisionObject> ptr) {

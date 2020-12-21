@@ -20,7 +20,7 @@ Eigen::Vector3d Camera::project(const Eigen::Vector3d &point) {
 void Camera::update_rotation_matrix() {
   forward = forward.normalized();
   up = up.normalized();
-  rotation_matrix.col(0) = up.cross(forward);
+  rotation_matrix.col(0) = up.cross(forward).normalized();
   rotation_matrix.col(1) = up;
   rotation_matrix.col(2) = forward;
   rotation_matrix = rotation_matrix.inverse().eval();

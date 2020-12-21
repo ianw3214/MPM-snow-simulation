@@ -28,12 +28,14 @@ public:
 
   Camera camera;
   Image image;
-  double render_depth = 20;
+  double render_depth_near = 1;
+  double render_depth_far = 10;
 
   void add_collision_object(std::unique_ptr<CollisionObject> ptr);
 
+  void render(int frame_index);
+
 private:
   bool m_firstTick;
-  int frame_index = 0;
   std::mt19937 gen;
 };

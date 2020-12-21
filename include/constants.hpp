@@ -9,10 +9,17 @@ public:
   const double critical_compression = 2.5e-2;
   const double critical_stretch = 7.5e-3;
 
-  const double mu = 0.5;
-  const double lambda = 0.5;
-
   const double flip_alpha = 0.95;
 
   const Eigen::Vector3d gravity = Eigen::Vector3d(0.0, -9.81, 0.0);
+
+  const double youngs_modulus = 1.4e5;
+  const double poissons_ratio = 0.2;
+
+  // These must be after youngs_modulus and poissons_ratio, so they are
+  // initialized after
+  const double mu;
+  const double lambda;
+
+  Constants();
 };
