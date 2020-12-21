@@ -1,5 +1,9 @@
 #include "image.hpp"
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+#include <algorithm>
+#include <cmath>
 #include <cstdio>
 #include <stdexcept>
 
@@ -24,6 +28,16 @@ const float &Image::operator()(int x, int y, int c) const {
   return data[y * width * channels + x * channels + c];
 }
 
-void Image::save_to_file(const std::string &filename) {
-  // TODO
+int Image::save_to_file(const std::string &filename) {
+  char *d = new char[data.size()];
+  auto size = data.size();
+  for (int i = 0; i < size; ++i) {
+    d[i] = std::clamp(((int)(data[i] * 255.0)), 0, 255);
+  }
+  stbi_flip_vertically_on_write(true);
+  int result = stbi_write_jpg(filename.c_str(), width, height, channels, d, 50);
+  delete[] d;
+  return result;
 }
+
+void Image::clear() { std::fill(data.begin(), data.end(), 0); }

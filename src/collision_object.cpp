@@ -2,7 +2,7 @@
 
 void CollisionObject::resolve_collision(const Eigen::Vector3d &position,
                                         Eigen::Vector3d &velocity, double dt) {
-  Eigen::Vector3d p2 = position + velocity;
+  Eigen::Vector3d p2 = position + dt * velocity;
   if (!detect_collision(p2))
     return;
 

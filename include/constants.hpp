@@ -4,6 +4,7 @@
 
 class Constants {
 public:
+  const double grid_cell_size = 0.1;
   const double hardening_coefficient = 10;
   const double critical_compression = 2.5e-2;
   const double critical_stretch = 7.5e-3;

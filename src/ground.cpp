@@ -2,7 +2,7 @@
 
 Ground::Ground() : Ground(0) {}
 
-Ground::Ground(double y) : y(y) { friction_coeff = 0.1; }
+Ground::Ground(double y) : y(y) { friction_coeff = 0.35; }
 
 bool Ground::detect_collision(const Eigen::Vector3d &position) {
   return position(1) <= y;

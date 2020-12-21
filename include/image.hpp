@@ -23,7 +23,9 @@ public:
   float &operator()(int x, int y, int c);
   const float &operator()(int x, int y, int c) const;
 
-  void save_to_file(const std::string &filename);
+  int save_to_file(const std::string &filename);
+
+  void clear();
 
 private:
   std::vector<float> data;
