@@ -58,12 +58,12 @@ void two_snowball(Simulation &simulation) {
  * This one needs NUM_STEPS_PER_FRAME to be 20
  */
 void snowball_drop(Simulation &simulation) {
-  simulation.add_sphere(1, 15, Eigen::Vector3d(-3, 4, 0),
+  simulation.add_sphere(1, 15, Eigen::Vector3d(-4, 4, 0),
                         Eigen::Vector3d(5, 1, 0), 0.2);
   simulation.add_collision_object(std::make_unique<Ground>(0));
-  simulation.camera.set_position(Eigen::Vector3d(0, 1, -5));
-  simulation.render_depth_near = 3.5;
-  simulation.render_depth_far = 6.5;
+  simulation.camera.set_position(Eigen::Vector3d(0, 1, -6));
+  simulation.render_depth_near = 4.5;
+  simulation.render_depth_far = 7.5;
 }
 } // namespace
 

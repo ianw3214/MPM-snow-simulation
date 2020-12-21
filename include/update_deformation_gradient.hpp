@@ -19,8 +19,8 @@
  */
 template <typename F>
 void update_deformation_gradient(const Constants &constants, Particle &particle,
-                                 const Grid &grid, double dt, F get_grad_weight,
-                                 bool debug) {
+                                 const Grid &grid, double dt,
+                                 F get_grad_weight) {
   Eigen::Matrix3d grad_v;
   grad_v.setZero();
   Eigen::Vector3d tmp_velocity;
@@ -42,27 +42,6 @@ void update_deformation_gradient(const Constants &constants, Particle &particle,
       }
     }
   }
-  if (debug) {
-    Eigen::Vector3d grad_weight_sum = Eigen::Vector3d::Zero();
-    for (int a = -1; a < 3; ++a) {
-      for (int b = -1; b < 3; ++b) {
-        for (int c = -1; c < 3; ++c) {
-          int i = coord.i + a;
-          int j = coord.j + b;
-          int k = coord.k + c;
-          temp_coord.i = i;
-          temp_coord.j = j;
-          temp_coord.k = k;
-          grad_weight = get_grad_weight(temp_coord, particle);
-          grad_weight_sum += grad_weight;
-        }
-      }
-    }
-    std::cout << grad_weight_sum << std::endl;
-    std::cout << grad_weight << std::endl;
-    std::cout << tmp_velocity << std::endl;
-    std::cout << grad_v << std::endl;
-  }
 
   Eigen::Matrix3d def_elastic_next =
       (Eigen::Matrix3d::Identity() + dt * grad_v) * particle.m_def_elastic;
@@ -71,10 +50,6 @@ void update_deformation_gradient(const Constants &constants, Particle &particle,
   Eigen::JacobiSVD<Eigen::Matrix3d> svd(
       def_elastic_next, Eigen::ComputeThinU | Eigen::ComputeThinV);
   Eigen::Vector3d sigma = svd.singularValues();
-
-  if (debug) {
-    std::cout << sigma << std::endl;
-  }
 
   double a = 1 - constants.critical_compression,
          b = 1 + constants.critical_stretch;
@@ -88,8 +63,4 @@ void update_deformation_gradient(const Constants &constants, Particle &particle,
                            svd.matrixU().transpose() * def_next;
   particle.m_def_elastic_det = particle.m_def_elastic.determinant();
   particle.m_def_plastic_det = particle.m_def_plastic.determinant();
-  if (debug) {
-    std::cout << particle.m_def_plastic_det << std::endl;
-    std::cout << "====" << std::endl;
-  }
 }

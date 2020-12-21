@@ -92,8 +92,7 @@ void Simulation::Update(double dt) {
                                                      : it->second;
   };
   for (auto &particle : particles) {
-    update_deformation_gradient(constants, particle, grid, dt, get_grad_weight,
-                                false);
+    update_deformation_gradient(constants, particle, grid, dt, get_grad_weight);
   }
 
   // 8. Update particle velocities.
