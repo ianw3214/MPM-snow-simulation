@@ -1,5 +1,7 @@
 # CSC417 final project
 
+You can watch our video [here](https://www.youtube.com/watch?v=ZQy6bHo0ImQ).
+
 ## Usage Instructions
 
 - Compile the CMake project.
